@@ -1,0 +1,2 @@
+start:
+	iex -S start
