@@ -5,7 +5,7 @@ WORKDIR /app
 RUN mix local.hex --force && mix local.rebar --force
 
 COPY ./lib ./lib
-COPY mix.exs ./
+COPY ./mix.exs ./
 
 RUN mix deps.get
 RUN mix compile
