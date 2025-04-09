@@ -1,2 +1,2 @@
 start:
-	iex -S start
+	iex -S mix
