@@ -1,0 +1,25 @@
+# Node 1
+iex --sname node1 -S mix
+
+{:ok, hostname} = :inet.gethostname()
+hostname = to_string(hostname)
+Node.connect(:"node2@#{hostname}")
+
+# We can use RPC to work to work with nodes without processes
+:rpc.call(:"node2@WIN-0QFLOBKQKJC", Enum, :map, [[1, 2, 3], fn x -> x * 2 end])
+
+# We can work with nodes using proceses, when we work with nodes, they are have shared general process list
+Process.register(self(), :receiver)
+flush()
+
+# Node 2
+iex --sname node2 -S mix
+
+Node.set_cookie("some cookie from first node. We can get it using Node.get_cookie(), both nodes must have the same cookie")
+
+# We can work with nodes using proceses
+send({:receiver, :"node1@WIN-0QFLOBKQKJC"}, {:hello, "from node2"})
+
+
+# About cookie, we can set cookie when we start our application. 
+iex --sname node1 --cookie your_cookie_value
